@@ -1,8 +1,8 @@
 import { userService } from "../../services";
 import { publicProcedure, router } from "../../trpc";
-import { setAuthenticationCookie } from "../../utils/cookie";
+import { getAuthenticationCookie, setAuthenticationCookie } from "../../utils/cookie";
 import { generatePath } from "../../utils/path-generator";
-import { CreateUserWithEmailAndPasswordInputModel, CreateUserWithEmailAndPasswordOutputModel, SignInUserWithEmailAndPasswordInputModel, SignInUserWithEmailAndPasswordOutputModel } from "./model";
+import { createUserWithEmailAndPasswordInputModel, createUserWithEmailAndPasswordOutputModel, getLoggedInUserInfoInputModel, getLoggedInUserInfoOutputModel, signInUserWithEmailAndPasswordInputModel, signInUserWithEmailAndPasswordOutputModel } from "./model";
 
 const TAGS = ["Authentication"];
 const getPath = generatePath("/authentication");
@@ -10,8 +10,8 @@ const getPath = generatePath("/authentication");
 export const authRouter = router({
     createUserWithEmailAndPassword: publicProcedure
     .meta({openapi: {method: "POST", path: getPath("/createUserWithEmailAndPassword"), tags: TAGS}})
-    .input(CreateUserWithEmailAndPasswordInputModel)
-    .output(CreateUserWithEmailAndPasswordOutputModel)
+    .input(createUserWithEmailAndPasswordInputModel)
+    .output(createUserWithEmailAndPasswordOutputModel)
     .mutation(async ({input, ctx}) => {
       const {fullName, email, password} = input;
 
@@ -24,8 +24,8 @@ export const authRouter = router({
 
     signInUserWithEmailAndPassword: publicProcedure
     .meta({openapi: {method: "POST", path: getPath("/signInUserWithEmailAndPassword"), tags: TAGS}})
-    .input(SignInUserWithEmailAndPasswordInputModel)
-    .output(SignInUserWithEmailAndPasswordOutputModel)
+    .input(signInUserWithEmailAndPasswordInputModel)
+    .output(signInUserWithEmailAndPasswordOutputModel)
     .mutation(async ({input, ctx}) => {
       const {email, password} = input;
 
@@ -34,6 +34,20 @@ export const authRouter = router({
       setAuthenticationCookie(ctx, token);
 
       return { id };
+    }),
+
+    getLoggedInUserInfo: publicProcedure
+    .meta({openapi: {method: "POST", path: getPath("/getLoggedInUserInfo"), tags: TAGS}})
+    .input(getLoggedInUserInfoInputModel)
+    .output(getLoggedInUserInfoOutputModel)
+    .query(async({ ctx })=>{
+      const userToken = getAuthenticationCookie(ctx)
+
+      if(!userToken) throw new Error('User is not logged in');
+
+      const { id, fullName, email, profileImgUrl } = await userService.verifyAndDecodeToken(userToken)
+
+      return { id, fullName, email, profileImgUrl }
     })
 });
 
