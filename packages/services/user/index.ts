@@ -35,7 +35,7 @@ class UserService {
     }
   }
 
-  private async getUserById(id: string){
+  public async getUserById(id: string){
     const user = await db.select({
       id: usersTable.id,
       email: usersTable.email,
@@ -45,7 +45,7 @@ class UserService {
 
     if (!user || user.length === 0) throw new Error("User Does not exist");
 
-    return user[0]
+    return user[0]!
   }
 
   public async createUserWithEmailAndPassword(payload: CreateUserWithEmailAndPasswordInputType) {
@@ -96,11 +96,7 @@ class UserService {
   public async verifyAndDecodeToken(token: string){
     const { id } = await this.verifyUserToken(token)
 
-    const userInfo = await this.getUserById(id)
-
-    if(!userInfo) throw new Error("User Does not exist")
-
-    return { ...userInfo }
+    return { id }
   }
 }
 
