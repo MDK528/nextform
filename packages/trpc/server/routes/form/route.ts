@@ -7,7 +7,7 @@ import { createFormInputModel, createFormOutputModel } from "./model";
 const TAGS = ["Forms"];
 const getPath = generatePath("/forms");
 
-export const formsRouter = router({
+export const formRouter = router({
   createForm: authenticatedProcedure
     .meta({ openapi: { method: "POST", path: getPath("/createForm"), tags: TAGS, protect: true } })
     .input(createFormInputModel)

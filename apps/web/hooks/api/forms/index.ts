@@ -6,12 +6,13 @@ export const useCreateForm = () => {
   const {
     mutateAsync: createFormAsync,
     mutate: createForm,
+    isLoading,
     error,
     failureCount,
     isIdle,
     isError,
     isSuccess,
-    status,
+    status
   } = trpc.form.createForm.useMutation({
     onSuccess: async () => {
       await utils.form.invalidate()
@@ -21,11 +22,12 @@ export const useCreateForm = () => {
   return {
     createFormAsync,
     createForm,
+    isLoading,
     error,
     failureCount,
     isIdle,
     isError,
     isSuccess,
-    status,
+    status
   };
 };
