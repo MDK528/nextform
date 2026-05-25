@@ -37,7 +37,7 @@ export const authRouter = router({
     }),
 
     getLoggedInUserInfo: authenticatedProcedure
-    .meta({openapi: {method: "POST", path: getPath("/getLoggedInUserInfo"), tags: TAGS}})
+    .meta({openapi: {method: "POST", path: getPath("/getLoggedInUserInfo"), tags: TAGS, protect: true }})
     .input(getLoggedInUserInfoInputModel)
     .output(getLoggedInUserInfoOutputModel)
     .query(async({ ctx })=>{

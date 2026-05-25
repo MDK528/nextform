@@ -1,5 +1,24 @@
-import { router, publicProcedure } from "../../trpc";
+import { TRPCError } from "@trpc/server";
+import { formService } from "../../services";
+import { authenticatedProcedure, router } from "../../trpc";
+import { generatePath } from "../../utils/path-generator";
+import { createFormInputModel, createFormOutputModel } from "./model";
 
-export const formRouter = router({
+const TAGS = ["Forms"];
+const getPath = generatePath("/forms");
 
-})
+export const formsRouter = router({
+  createForm: authenticatedProcedure
+    .meta({ openapi: { method: "POST", path: getPath("/createForm"), tags: TAGS, protect: true } })
+    .input(createFormInputModel)
+    .output(createFormOutputModel)
+    .mutation(async ({ input, ctx }) => {
+      const {title, description, isPublished, visibility} = input
+      const userId = ctx.user?.id;
+      if (!userId) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'User not authenticated' });
+
+      const { id } = await formService.createForm({ createdBy: userId, title, description, isPublished, visibility });
+
+      return { id };
+    }),
+});
