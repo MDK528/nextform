@@ -27,7 +27,7 @@ type CreateFormValues = {
 
 export function Form() {
   const [open, setOpen] = React.useState(false);
-  const { createFormAsync, isLoading , isError } = useCreateForm();
+  const { createFormAsync, isPending, isError } = useCreateForm();
 
   const form = useForm<CreateFormValues>({
     defaultValues: {
@@ -120,8 +120,8 @@ export function Form() {
                     Cancel
                   </Button>
                 </DialogClose>
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? "Creating..." : "Create form"}
+                <Button type="submit" disabled={isPending}>
+                  {isPending ? "Creating..." : "Create form"}
                 </Button>
               </DialogFooter>
             </form>

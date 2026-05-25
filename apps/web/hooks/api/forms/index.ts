@@ -6,7 +6,7 @@ export const useCreateForm = () => {
   const {
     mutateAsync: createFormAsync,
     mutate: createForm,
-    isLoading,
+    isPending,
     error,
     failureCount,
     isIdle,
@@ -22,7 +22,7 @@ export const useCreateForm = () => {
   return {
     createFormAsync,
     createForm,
-    isLoading,
+    isPending,
     error,
     failureCount,
     isIdle,
