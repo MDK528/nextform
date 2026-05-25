@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const CreateFormInput = z.object({
-  createdBy: z.string().uuid().describe('The UUID of the user creating the form'),
+  createdBy: z.uuid().describe('The UUID of the user creating the form'),
   title: z.string().min(1).max(55).describe('The title of the form'),
   description: z.string().max(300).optional().describe('Optional description of the form'),
   isPublished: z.boolean().optional().describe('Whether the form is published'),
@@ -9,3 +9,9 @@ export const CreateFormInput = z.object({
 });
 
 export type CreateFormInputType = z.infer<typeof CreateFormInput>;
+
+export const listFormsByUserIdInput = z.object({
+  userId: z.uuid().describe('The UUID of the user creating the form')
+})
+
+export type ListFormsByUserIdInputType = z.infer<typeof listFormsByUserIdInput>
