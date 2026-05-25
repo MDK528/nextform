@@ -25,7 +25,7 @@ type CreateFormValues = {
   isPublished: boolean;
 };
 
-export function Form() {
+export function CreateFormDialog() {
   const [open, setOpen] = React.useState(false);
   const { createFormAsync, isPending, isError } = useCreateForm();
 
@@ -45,7 +45,7 @@ export function Form() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="py-6 px-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold">Forms</h1>
