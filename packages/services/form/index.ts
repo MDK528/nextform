@@ -3,7 +3,7 @@ import { formsTable } from "@repo/database/schema";
 import { CreateFormInput, CreateFormInputType, listFormsByUserIdInput, ListFormsByUserIdInputType } from "./model";
 
 class FormService {
-    
+
   public async createForm(payload: CreateFormInputType) {
     const { createdBy, title, description, isPublished = false, visibility = 'PUBLIC' } = await CreateFormInput.parseAsync(payload);
 

@@ -1,4 +1,3 @@
-import { TRPCError } from "@trpc/server";
 import { formService } from "../../services";
 import { authenticatedProcedure, router } from "../../trpc";
 import { generatePath } from "../../utils/path-generator";
@@ -29,7 +28,7 @@ export const formRouter = router({
   .input(z.undefined())
   .output(listFormsOutputModel)
   .query(async ({ctx}) => {
-    const forms =  formService.lisFormsByUserId({userId: ctx.user.id})
+    const forms = await formService.listFormsByUserId({userId: ctx.user.id})
 
     return forms
   })

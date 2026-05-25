@@ -18,9 +18,9 @@ export const listFormsOutputModel = z.array(
   z.object({
     id: z.uuid().describe('The ID of the form'),
     title: z.string().nullable().describe('The title of the form'),
-    description: z.string().optional().describe('Optional description of the form'),
-    isPublished: z.boolean().optional().describe('Whether the form is published'),
-    visibility: z.enum(['PUBLIC', 'UNLISTED']).optional().describe('Form visibility'),
+    description: z.string().nullable().describe('Optional description of the form'),
+    isPublished: z.boolean().nullable().describe('Whether the form is published'),
+    visibility: z.enum(['PUBLIC', 'UNLISTED']).nullable().describe('Form visibility'),
     createdAt: z.date().nullable().describe('Creation timestamp'),
     updatedAt: z.date().nullable().describe('Last updated timestamp')
   })

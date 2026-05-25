@@ -63,7 +63,7 @@ export function FormsTable() {
               Created
             </th>
 
-            <th className="w-[60px]" />
+            <th className="w-15" />
           </tr>
         </thead>
 

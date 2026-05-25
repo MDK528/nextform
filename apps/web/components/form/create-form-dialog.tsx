@@ -47,12 +47,6 @@ export function CreateFormDialog() {
   return (
     <div className="py-6 px-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">Forms</h1>
-          <p className="text-sm text-muted-foreground">
-            Create a new form and manage your workspace forms.
-          </p>
-        </div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button>Create new form</Button>
