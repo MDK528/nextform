@@ -117,10 +117,10 @@ class FormService {
     return { id };
   }
 
-  public async getField(payload: GetFormFieldInputType) {
-    const { fieldId } = await GetFormFieldInput.parseAsync(payload);
+  public async getFields(payload: GetFormFieldInputType) {
+    const { formId } = await GetFormFieldInput.parseAsync(payload);
 
-    const field = await db.select({
+    const fields = await db.select({
       id: formFieldsTable.id,
       formId: formFieldsTable.formId,
       fieldName: formFieldsTable.fieldName,
@@ -133,11 +133,11 @@ class FormService {
       description: formFieldsTable.description,
       createdAt: formFieldsTable.createdAt,
       updatedAt: formFieldsTable.updatedAt,
-    }).from(formFieldsTable).where(eq(formFieldsTable.id, fieldId));
+    }).from(formFieldsTable).where(eq(formFieldsTable.formId, formId));
 
-    if (!field || field.length === 0) throw new Error('Field not found');
+    // if (!fields || fields.length === 0) throw new Error('Field not found');
 
-    return field[0];
+    return fields;
   }
 }
 export default FormService;

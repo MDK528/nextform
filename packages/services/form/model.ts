@@ -26,7 +26,7 @@ export const CreateFormFieldInput = z.object({
   options: z.array(z.string()).optional().describe('Select options for the field'),
   placeholder: z.string().max(30).optional().describe('The placeholder text for the field'),
   isRequired: z.boolean().optional().describe('Whether the field is required'),
-  orderIndex: z.string().describe('The fractional sort index for the field'),
+  orderIndex: z.number().describe('The fractional sort index for the field'),
   description: z.string().optional().describe('Optional field description'),
 });
 
@@ -39,7 +39,7 @@ export const DeleteFormFieldInput = z.object({
 export type DeleteFormFieldInputType = z.infer<typeof DeleteFormFieldInput>;
 
 export const GetFormFieldInput = z.object({
-  fieldId: z.uuid().describe('The UUID of the field to fetch'),
+  formId: z.uuid().describe('The UUID of the form to fetch fields'),
 });
 
 export type GetFormFieldInputType = z.infer<typeof GetFormFieldInput>;
@@ -51,7 +51,7 @@ export const UpdateFormFieldInput = z.object({
   options: z.array(z.string()).optional().describe('Select options for the field'),
   placeholder: z.string().max(30).optional().describe('The placeholder text for the field'),
   isRequired: z.boolean().optional().describe('Whether the field is required'),
-  orderIndex: z.number().optional().describe('The fractional sort index for the field'),
+  orderIndex: z.number().describe('The fractional sort index for the field'),
   description: z.string().optional().describe('Optional field description'),
 });
 

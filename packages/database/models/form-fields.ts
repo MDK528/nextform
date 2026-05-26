@@ -26,7 +26,7 @@ export const formFieldsTable = pgTable("form_fields", {
 
   placeholder: varchar('placeholder',  {length: 30 }),
   isRequired: boolean('is_required').default(false).notNull(),
-  orderIndex: numeric('order_index', { scale: 2}).notNull(),
+  orderIndex: numeric('order_index', { scale: 2, mode: "number"}).notNull(),
   description: text('description'),
 
   createdAt: timestamp("created_at").defaultNow(),
