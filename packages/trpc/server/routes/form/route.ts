@@ -1,5 +1,5 @@
 import { formService } from "../../services";
-import { authenticatedProcedure, router } from "../../trpc";
+import { authenticatedProcedure, publicProcedure, router } from "../../trpc";
 import { generatePath } from "../../utils/path-generator";
 import { z } from "zod";
 import {
@@ -14,7 +14,10 @@ import {
   deleteFieldInputModel,
   deleteFieldOutputModel,
   listFormsOutputModel,
+  getFormByIdInputModel,
+  getFormByIdOutputModel,
 } from "./model";
+import { GetFormByIdOutputType } from "@repo/services/form/model";
 
 const TAGS = ["Forms"];
 const getPath = generatePath("/forms");
@@ -81,5 +84,15 @@ export const formRouter = router({
     const forms = await formService.listFormsByUserId({userId: ctx.user.id})
 
     return forms
+  }),
+
+  getFormById: publicProcedure
+  .meta({ openapi: { method: "GET", path: getPath("/getForm"), tags: TAGS, protect: true } })
+  .input(getFormByIdInputModel)
+  .output(getFormByIdOutputModel)
+  .query(async ({input}) => {
+    const form =  await formService.getFormById({formId: input.formId})
+
+    return form
   })
 });

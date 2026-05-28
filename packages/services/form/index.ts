@@ -1,4 +1,4 @@
-import { db, eq } from "@repo/database";
+import { db, eq, asc } from "@repo/database";
 import { formsTable, formFieldsTable } from "@repo/database/schema";
 import {
   CreateFormInput,
@@ -13,6 +13,9 @@ import {
   GetFormFieldInputType,
   UpdateFormFieldInput,
   UpdateFormFieldInputType,
+  GetFormByIdInputModel,
+  GetFormByIdInputType,
+  GetFormByIdOutputType
 } from "./model";
 
 class FormService {
@@ -135,9 +138,46 @@ class FormService {
       updatedAt: formFieldsTable.updatedAt,
     }).from(formFieldsTable).where(eq(formFieldsTable.formId, formId));
 
-    // if (!fields || fields.length === 0) throw new Error('Field not found');
-
     return fields;
+  }
+
+  public async getFormById(payload: GetFormByIdInputType){
+    const { formId } = await GetFormByIdInputModel.parseAsync(payload)
+
+    const result = await db.select({
+      id: formsTable.id,
+      title: formsTable.title,
+      description: formsTable.description,
+      isPublished: formsTable.isPublished,
+      visibility: formsTable.visibility,
+      createdBy: formsTable.createdBy,
+      createdAt: formsTable.createdAt,
+      updatedAt: formsTable.updatedAt,
+      fields: {
+        id: formFieldsTable.id,
+        fieldName: formFieldsTable.fieldName,
+        fieldType: formFieldsTable.fieldType,
+        options: formFieldsTable.options,
+        placeholder: formFieldsTable.placeholder,
+        isRequired: formFieldsTable.isRequired,
+        orderIndex: formFieldsTable.orderIndex,
+        description: formFieldsTable.description,
+      }
+    })
+    .from(formsTable)
+    .leftJoin(formFieldsTable, eq(formFieldsTable.formId, formsTable.id))
+    .where(eq(formsTable.id, formId))
+    .orderBy(asc(formFieldsTable.orderIndex))
+
+   if (!result || result.length === 0) throw new Error("Form not found");
+
+    const { id, title, description, isPublished, visibility, createdBy, createdAt, updatedAt } = result[0]!;
+
+    const fields = result
+      .filter(row => row.fields?.id !== null)
+      .map(row => row.fields!);
+
+    return { id, title, description, isPublished, visibility, createdBy, createdAt, updatedAt, fields };
   }
 }
 export default FormService;

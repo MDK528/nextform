@@ -56,3 +56,33 @@ export const UpdateFormFieldInput = z.object({
 });
 
 export type UpdateFormFieldInputType = z.infer<typeof UpdateFormFieldInput>;
+
+export const GetFormByIdInputModel = z.object({
+  formId: z.uuid().describe('The ID of the form'),
+});
+
+export const GetFormByIdOutputModel = z.object({
+  id: z.uuid().describe('The ID of the form'),
+  title: z.string().nullable().describe('The title of the form'),
+  description: z.string().nullable().describe('Optional description of the form'),
+  isPublished: z.boolean().nullable().describe('Whether the form is published'),
+  visibility: z.enum(['PUBLIC', 'UNLISTED']).nullable().describe('Form visibility'),
+  createdBy: z.uuid().nullable().describe('The ID of the form creator'),
+  createdAt: z.date().nullable().describe('Creation timestamp'),
+  updatedAt: z.date().nullable().describe('Last updated timestamp'),
+  fields: z.array(
+    z.object({
+      id: z.uuid().describe('The UUID of the field to update'),
+      fieldName: z.string().nullable().describe('The label of the field'),
+      fieldType: z.enum(['TEXT', 'NUMBER', 'EMAIL', 'PASSWORD', 'SELECT']).nullable().describe('The type of the field'),
+      options: z.array(z.string()).nullable().describe('Select options for the field'),
+      placeholder: z.string().nullable().describe('The placeholder text for the field'),
+      isRequired: z.boolean().nullable().describe('Whether the field is required'),
+      description: z.string().nullable().describe('Optional field description'),
+      orderIndex: z.number().describe('The fractional sort index for the field'),
+    })
+  ),
+});
+
+export type GetFormByIdInputType  = z.infer<typeof GetFormByIdInputModel>;
+export type GetFormByIdOutputType = z.infer<typeof GetFormByIdOutputModel>;
